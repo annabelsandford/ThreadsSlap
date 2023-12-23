@@ -37,6 +37,12 @@
           var username = usernameMatch ? usernameMatch[1].trim() : "";
           var post = jsonData.description;
           var image = jsonData.images[0];
+
+          // check if jsonData.images[1] exists, if so, use that instead
+            if (jsonData.images[1]) {
+                image = jsonData.images[1];
+            }
+
           console.log(username);
             console.log(post);
             console.log(image);
