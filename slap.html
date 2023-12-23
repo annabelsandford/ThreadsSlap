@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThreadSlap 1.0</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+  <canvas id="resultCanvas" style="display:none;"></canvas>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var jsonlinkUrl = "https://jsonlink.io/api/extract?url=";
+      // get threads url from url parameter after "?THREADSURL="
+        var threadsUrl = window.location.search.split("THREADSURL=")[1];
+      var api_key = "pk_8214cc7421a0ff4e43d4edc29faca135705b4cb7";
+
+      var fetch_json = true;
+      var test_username = "Dings Name";
+      var test_post = "Dings";
+
+      var fullJsonlinkUrl = jsonlinkUrl + encodeURIComponent(threadsUrl) + "&api_key=" + api_key;
+
+      if (fetch_json) {
+        fetch(fullJsonlinkUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(jsonData => {
+          // Extract data from JSON
+          var usernameMatch = jsonData.title.match(/@([^•]+)/);
+          var username = usernameMatch ? usernameMatch[1].trim() : "";
+          var post = jsonData.description;
+          var image = jsonData.images[0];
+          console.log(username);
+            console.log(post);
+            console.log(image);
+
+          test_username = username;
+            test_post = post;
+
+          var canvas = document.getElementById("resultCanvas");
+        var ctx = canvas.getContext("2d");
+        canvas.width = 640;
+        canvas.height = 360;
+
+        var feelings = ["Mausig", "Hungrig", "Threadmüde", "Crusty"];
+
+        var feeling = feelings[Math.floor(Math.random() * feelings.length)];
+
+        var backgroundImage = new Image();
+        backgroundImage.src = "template.png";
+        backgroundImage.onload = function() {
+          ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+          ctx.font = "bold 20px Arial";
+          ctx.fillStyle = "purple";
+
+            ctx.rotate(-0.02);
+
+          ctx.fillText("@"+test_username, 230, 110);
+
+            ctx.font = "bold 14px Arial";
+            ctx.fillStyle = "black";
+
+            var words = test_post.split(' ');
+            var line = '';
+            var y = 140;
+            var lineHeight = 15;
+
+            for (var n = 0; n < words.length; n++) {
+              var testLine = line + words[n] + ' ';
+              var metrics = ctx.measureText(testLine);
+              var testWidth = metrics.width;
+            
+              if (testWidth > 240 && n > 0) {
+                ctx.fillText(line, 230, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+            
+                // Check if it's the last word, and if so, draw it separately
+                if (n === words.length - 1) {
+                  ctx.fillText(line, 230, y);
+                }
+              } else {
+                line = testLine;
+            
+                // Check if it's the last word, and if so, draw it separately
+                if (n === words.length - 1) {
+                  ctx.fillText(line, 230, y);
+                }
+              }
+            }
+
+            ctx.font = "bold 16px Arial";
+            ctx.fillStyle = "purple";
+            ctx.fillText(feeling, 317, 243);
+
+            // draw image on canvas
+            var img = new Image();
+            img.crossOrigin = "anonymous"; // This enables CORS
+            var proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            var targetUrl = image;
+            img.src = proxyUrl + targetUrl;
+            img.onload = function() {
+                ctx.drawImage(img, 137, 140, 70, 70);
+            };
+
+          canvas.style.display = "block";
+        };
+        })
+        .catch(error => {
+          console.error("Fetch error:", error);
+        });
+      } else {
+        var canvas = document.getElementById("resultCanvas");
+        var ctx = canvas.getContext("2d");
+        canvas.width = 640;
+        canvas.height = 360;
+
+        var feelings = ["Mausig", "Hungrig", "Threadmüde", "Crusty"];
+
+        var feeling = feelings[Math.floor(Math.random() * feelings.length)];
+
+        var backgroundImage = new Image();
+        backgroundImage.src = "template.png";
+        backgroundImage.onload = function() {
+          ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+          ctx.font = "bold 20px Arial";
+          ctx.fillStyle = "purple";
+
+            ctx.rotate(-0.02);
+
+          ctx.fillText(test_username, 230, 110);
+
+            ctx.font = "bold 16px Arial";
+            ctx.fillStyle = "black";
+
+            var words = test_post.split(' ');
+            var line = '';
+            var y = 130;
+            var lineHeight = 20;
+            for (var n = 0; n < words.length; n++) {
+              var testLine = line + words[n] + ' ';
+              var metrics = ctx.measureText(testLine);
+              var testWidth = metrics.width;
+              if (testWidth > 240 && n > 0) {
+                ctx.fillText(line, 230, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+              }
+              else {
+                line = testLine;
+              }
+            }
+
+            ctx.font = "bold 16px Arial";
+            ctx.fillStyle = "purple";
+            ctx.fillText(feeling, 317, 243);
+
+          canvas.style.display = "block";
+        };
+      }
+    });
+  </script>
+
+</body>
+</html>
