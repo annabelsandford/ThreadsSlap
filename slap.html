@@ -14,13 +14,7 @@
     document.addEventListener("DOMContentLoaded", function() {
       var jsonlinkUrl = "https://jsonlink.io/api/extract?url=";
       // get threads url from url parameter (there's two ? in the url, so we need to use the second one)
-      var threadsUrl = window.location.href.split("?")[2];
-
-// Ensure that threadsUrl is not undefined before using it
-if (threadsUrl) {
-  // Now, threadsUrl should contain "https://www.threads.net/@sandrasantana/post/C1NAsB4MVo6"
-  console.log(threadsUrl);
-}
+        var threadsUrl = window.location.href.split("?")[1];
       var api_key = "pk_8214cc7421a0ff4e43d4edc29faca135705b4cb7";
 
       var fetch_json = true;
