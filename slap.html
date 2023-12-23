@@ -13,8 +13,8 @@
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       var jsonlinkUrl = "https://jsonlink.io/api/extract?url=";
-      // get threads url from url parameter
-        var threadsUrl = window.location.search.substring(2);
+      // get threads url from url parameter (there's two ? in the url, so we need to use the second one)
+        var threadsUrl = window.location.href.split("?")[1];
       var api_key = "pk_8214cc7421a0ff4e43d4edc29faca135705b4cb7";
 
       var fetch_json = true;
